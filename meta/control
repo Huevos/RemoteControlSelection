@@ -1,0 +1,7 @@
+Package: SelectRemote
+Version: 0.1
+Description: Select any remote from oe-mirrors branding module
+Section: extra
+Priority: optional
+License: MIT
+Architecture: all

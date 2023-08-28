@@ -1,4 +1,4 @@
-Package: RemoteControlSelection
+Package: enigma2-plugin-systemplugins-remotecontrolselection
 Version: 0.1
 Description: Select any remote from oe-mirrors branding module
 Section: extra

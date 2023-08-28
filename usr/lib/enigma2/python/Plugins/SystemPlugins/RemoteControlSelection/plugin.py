@@ -67,7 +67,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 	def __init__(self, session):
 		self.config = config.plugins.remotecontrolselection
 		Screen.__init__(self, session)
-		self.title = _("Remote Selector")
+		self.title = _("Remote control selection")
 		self.skinName = [self.__class__.__name__, "Setup"]
 		self.skinAvailable = findSkinScreen(self.skinName[0])
 		self["description"] = Label("")
@@ -182,9 +182,9 @@ def main(session, **kwargs):
 	session.open(RemoteControlSelection)
 
 def fromMenu(menuid, **kwargs):
-	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
+	return [(_("Remote control selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
 	
 
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("Remote Control Selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
-#	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
+	return [PluginDescriptor(name=_("Remote control selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
+#	return [PluginDescriptor(name=_("Remote control selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]

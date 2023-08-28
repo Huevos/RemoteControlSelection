@@ -46,7 +46,7 @@ def setRCFile(force=False):
 		SystemInfo["rc_default"] = True
 	from Screens.Rc import RcPositions
 	RcPositions.rc = None
-	
+
 setRCFile()  # update on initial load
 
 
@@ -67,7 +67,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 	def __init__(self, session):
 		self.config = config.plugins.remotecontrolselection
 		Screen.__init__(self, session)
-		self.title = _("Remote control selection")
+		self.title = _("Remote Control Selection")
 		self.skinName = [self.__class__.__name__, "Setup"]
 		self.skinAvailable = findSkinScreen(self.skinName[0])
 		self["description"] = Label("")
@@ -79,7 +79,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 			"blue": self.keyBlue,
 		}, -2)
 		self.onLayoutFinish.append(self.populate)
-		
+
 	def populate(self):
 		self.getRemotes()
 		if names := list(self.remotes.keys()):
@@ -87,7 +87,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 			self.remote = ConfigSelection(default=default, choices=names)
 			self["config"].list = [getConfigListEntry(_("Remote"), self.remote, _("Choose the remote you want to use."))]
 			self.updateImage()
-		
+
 	def fetchJson(self, path):
 		try:
 			return json.load(urlopen(path))
@@ -95,7 +95,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 			import traceback
 			traceback.print_exc()
 		return []
-	
+
 	def getRemotes(self):
 		self.remotes = {}
 		for item in self.fetchJson(data_path):
@@ -114,8 +114,8 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 				start_new_thread(threadDownloadPage, (urlPath, filePath, boundFunction(self.showImage, filePath), self.dataError))
 			else:
 				self.showImage(filePath)
-		
-			
+
+
 	def showImage(self, image, *args, **kwargs):
 		rc = LoadPixmap(image)
 		if rc:
@@ -132,7 +132,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 			import traceback
 			traceback.print_exc()
 		return ""
-			
+
 	def keySave(self):
 		confPath = resolveFilename(SCOPE_CONFIG)
 		os_makedirs(os_path_join(confPath, "RemoteControlSelection"), exist_ok=True)
@@ -169,22 +169,22 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		configfile.save()
 		setRCFile(force=True)
 		self.close()
-			
+
 	def keyCancel(self):
 		self.close()
 
 	def keyBlue(self):
 		self.remote.value = SystemInfo["rc_model"]
 		self.keySave()
-				
-			
+
+
 def main(session, **kwargs):
 	session.open(RemoteControlSelection)
 
 def fromMenu(menuid, **kwargs):
-	return [(_("Remote control selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
-	
+	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
+
 
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("Remote control selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
-#	return [PluginDescriptor(name=_("Remote control selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
+	return [PluginDescriptor(name=_("Remote Control Selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
+#	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]

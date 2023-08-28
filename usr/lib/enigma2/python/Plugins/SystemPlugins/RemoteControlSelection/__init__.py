@@ -4,8 +4,8 @@ from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
 
-PluginLanguageDomain = "selectremote"
-PluginLanguagePath = "Extensions/SelectRemote/locale"
+PluginLanguageDomain = "remotecontrolselection"
+PluginLanguagePath = "SystemPlugins/RemoteControlSelection/locale"
 
 
 def pluginlanguagedomain():

@@ -26,19 +26,19 @@ from Tools.Directories import fileExists, resolveFilename, SCOPE_CONFIG, SCOPE_S
 from Tools.LoadPixmap import LoadPixmap
 
 
-config.plugins.selectremote = ConfigSubsection()
-config.plugins.selectremote.remote = ConfigText(default="", fixed_size=False)
+config.plugins.remotecontrolselection = ConfigSubsection()
+config.plugins.remotecontrolselection.remote = ConfigText(default="", fixed_size=False)
 
 data_path = "https://api.github.com/repos/oe-mirrors/branding-module/contents/BoxBranding/remotes"
 download_path = "https://raw.githubusercontent.com/oe-mirrors/branding-module/master/BoxBranding/remotes"
 
-tempDir = "/var/volatile/tmp/SelectRemote"
+tempDir = "/var/volatile/tmp/RemoteControlSelection"
 
 def setRCFile(force=False):
-	if not force and (not config.plugins.selectremote.remote.value or SystemInfo["rc_model"] == config.plugins.selectremote.remote.value):
+	if not force and (not config.plugins.remotecontrolselection.remote.value or SystemInfo["rc_model"] == config.plugins.remotecontrolselection.remote.value):
 		return
-	SystemInfo["RCImage"] = resolveFilename(SCOPE_CONFIG, os_path_join("SelectRemote", "rc.png"))
-	SystemInfo["RCMapping"] = resolveFilename(SCOPE_CONFIG, os_path_join("SelectRemote", "rcpositions.xml"))
+	SystemInfo["RCImage"] = resolveFilename(SCOPE_CONFIG, os_path_join("RemoteControlSelection", "rc.png"))
+	SystemInfo["RCMapping"] = resolveFilename(SCOPE_CONFIG, os_path_join("RemoteControlSelection", "rcpositions.xml"))
 	if not (isfile(SystemInfo["RCImage"]) and isfile(SystemInfo["RCMapping"])):
 		SystemInfo["RCImage"] = resolveFilename(SCOPE_SKIN, os_path_join("rc_models", SystemInfo["rc_model"], "rc.png"))
 		SystemInfo["RCMapping"] = resolveFilename(SCOPE_SKIN, os_path_join("rc_models", SystemInfo["rc_model"], "rcpositions.xml"))
@@ -63,11 +63,11 @@ def threadDownloadPage(link, file, success, fail=None):
 			fail(error)
 
 
-class SelectRemote(ConfigListScreen, Screen):
+class RemoteControlSelection(ConfigListScreen, Screen):
 	def __init__(self, session):
-		self.config = config.plugins.selectremote
+		self.config = config.plugins.remotecontrolselection
 		Screen.__init__(self, session)
-		self.title = _("SelectRemote")
+		self.title = _("Remote Selector")
 		self.skinName = [self.__class__.__name__, "Setup"]
 		self.skinAvailable = findSkinScreen(self.skinName[0])
 		self["description"] = Label("")
@@ -122,7 +122,7 @@ class SelectRemote(ConfigListScreen, Screen):
 			self["image"].instance.setPixmap(rc)
 
 	def dataError(self, error):
-		print("[SelectRemote] Error: %s" % error)
+		print("[RemoteControlSelection] Error: %s" % error)
 
 	def fetchUrl(self, url):
 		try:
@@ -135,10 +135,10 @@ class SelectRemote(ConfigListScreen, Screen):
 			
 	def keySave(self):
 		confPath = resolveFilename(SCOPE_CONFIG)
-		os_makedirs(os_path_join(confPath, "SelectRemote"), exist_ok=True)
-		if exists(rc_png := os_path_join(confPath, "SelectRemote", "rc.png")):
+		os_makedirs(os_path_join(confPath, "RemoteControlSelection"), exist_ok=True)
+		if exists(rc_png := os_path_join(confPath, "RemoteControlSelection", "rc.png")):
 			remove(rc_png)
-		if exists(rcpositions := os_path_join(confPath, "SelectRemote", "rcpositions.xml")):
+		if exists(rcpositions := os_path_join(confPath, "RemoteControlSelection", "rcpositions.xml")):
 			remove(rcpositions)
 		if SystemInfo["rc_model"] != self.remote.value:
 			url = self.remotes[self.remote.value]
@@ -176,12 +176,15 @@ class SelectRemote(ConfigListScreen, Screen):
 	def keyBlue(self):
 		self.remote.value = SystemInfo["rc_model"]
 		self.keySave()
-		
 				
 			
-def fromPluginMenu(session, **kwargs):
-	session.open(SelectRemote)
+def main(session, **kwargs):
+	session.open(RemoteControlSelection)
+
+def fromMenu(menuid, **kwargs):
+	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
 	
 
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("SelectRemote"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=fromPluginMenu)]
+	return [PluginDescriptor(name=_("Remote Control Selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
+#	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]

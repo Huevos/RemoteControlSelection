@@ -72,7 +72,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		self.skinAvailable = findSkinScreen(self.skinName[0])
 		self["description"] = Label("")
 		ConfigListScreen.__init__(self, [], on_change=self.updateImage, fullUI=True)
-		self["image"] = Pixmap()
+		self["rc"] = Pixmap()
 		self["key_blue"] = StaticText()
 		self["actions"] = ActionMap(["ColorActions"],
 		{
@@ -119,7 +119,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 	def showImage(self, image, *args, **kwargs):
 		rc = LoadPixmap(image)
 		if rc:
-			self["image"].instance.setPixmap(rc)
+			self["rc"].instance.setPixmap(rc)
 
 	def dataError(self, error):
 		print("[RemoteControlSelection] Error: %s" % error)

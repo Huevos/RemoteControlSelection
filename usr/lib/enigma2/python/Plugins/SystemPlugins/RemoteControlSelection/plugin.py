@@ -177,7 +177,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		configfile.save()
 		self.cleanup()
 		setRCFile(force=True)
-		self.close()
+		self.close(True)
 
 	def keyCancel(self):
 		self.cleanup()
@@ -192,12 +192,16 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 			rmtree(tempDir)
 
 
-def main(session, **kwargs):
-	session.open(RemoteControlSelection)
+def main(session, close=None, **kwargs):
+	session.openWithCallback(boundFunction(mainCallback, close), RemoteControlSelection)
+
+def mainCallback(close, answer=None, *args):
+	if close and answer:
+		close(True)
 
 def fromMenu(menuid, **kwargs):
-	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
+	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49, True)] if menuid == "system" else []
 
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("Remote Control Selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
+	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
 #	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]

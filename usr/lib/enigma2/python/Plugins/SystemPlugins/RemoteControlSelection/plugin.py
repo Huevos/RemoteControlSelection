@@ -141,10 +141,11 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		return ""
 
 	def keySave(self):
+		# we are always going to update the files even if saving the same remote because these may have changed on oe-mirrors
 		os_makedirs(confPath := os_path_join(resolveFilename(SCOPE_CONFIG), "RemoteControlSelection"), exist_ok=True)
-		if exists(rc_png := os_path_join(confPath, "rc.png")):
+		if fileExists(rc_png := os_path_join(confPath, "rc.png")):
 			remove(rc_png)
-		if exists(rcpositions := os_path_join(confPath, "rcpositions.xml")):
+		if fileExists(rcpositions := os_path_join(confPath, "rcpositions.xml")):
 			remove(rcpositions)
 		if SystemInfo["rc_model"] != self.remote.value:
 			url = self.remotes[self.remote.value]

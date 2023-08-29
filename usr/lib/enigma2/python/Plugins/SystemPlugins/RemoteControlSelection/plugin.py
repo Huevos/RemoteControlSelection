@@ -2,6 +2,7 @@ from urllib.request import urlopen
 import json
 from os import makedirs as os_makedirs, remove
 from os.path import join as os_path_join, isfile, exists
+from shutil import rmtree
 
 from requests import get, exceptions
 
@@ -35,7 +36,7 @@ download_path = "https://raw.githubusercontent.com/oe-mirrors/branding-module/ma
 tempDir = "/var/volatile/tmp/RemoteControlSelection"
 
 def setRCFile(force=False):
-	if not force and (not config.plugins.remotecontrolselection.remote.value or SystemInfo["rc_model"] == config.plugins.remotecontrolselection.remote.value):
+	if not force and config.plugins.remotecontrolselection.remote.value == "":
 		return
 	SystemInfo["RCImage"] = resolveFilename(SCOPE_CONFIG, os_path_join("RemoteControlSelection", "rc.png"))
 	SystemInfo["RCMapping"] = resolveFilename(SCOPE_CONFIG, os_path_join("RemoteControlSelection", "rcpositions.xml"))
@@ -109,12 +110,17 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		self["key_blue"].text = _("Reset to default") if SystemInfo["rc_model"] != self.remote.value else ""
 		ConfigListScreen.changedEntry(self) # force summary update always, not just on select/deselect
 		if self.skinAvailable:
-			os_makedirs(os_path_join(tempDir, self.remote.value), exist_ok=True)
-			if not fileExists(filePath := os_path_join(tempDir, self.remote.value, "rc.png")):
-				urlPath = os_path_join(download_path, self.remote.value, "rc.png")
-				start_new_thread(threadDownloadPage, (urlPath, filePath, boundFunction(self.showImage, filePath), self.dataError))
+			if SystemInfo["rc_model"] == self.remote.value and fileExists(filePath := resolveFilename(SCOPE_SKIN, os_path_join("rc_models", SystemInfo["rc_model"], "rc.png"))):
+				self.showImage(filePath)  # this is the default file for the machine
+			elif self.remote.value == self.config.remote.value and fileExists(filePath := resolveFilename(SCOPE_CONFIG, os_path_join("RemoteControlSelection", "rc.png"))):
+				self.showImage(filePath)  # we already have the file available in /etc/enigma2
 			else:
-				self.showImage(filePath)
+				os_makedirs(os_path_join(tempDir, self.remote.value), exist_ok=True)
+				if not fileExists(filePath := os_path_join(tempDir, self.remote.value, "rc.png")):
+					urlPath = os_path_join(download_path, self.remote.value, "rc.png")
+					start_new_thread(threadDownloadPage, (urlPath, filePath, boundFunction(self.showImage, filePath), self.dataError))
+				else:
+					self.showImage(filePath)
 
 
 	def showImage(self, image, *args, **kwargs):
@@ -135,11 +141,10 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 		return ""
 
 	def keySave(self):
-		confPath = resolveFilename(SCOPE_CONFIG)
-		os_makedirs(os_path_join(confPath, "RemoteControlSelection"), exist_ok=True)
-		if exists(rc_png := os_path_join(confPath, "RemoteControlSelection", "rc.png")):
+		os_makedirs(confPath := os_path_join(resolveFilename(SCOPE_CONFIG), "RemoteControlSelection"), exist_ok=True)
+		if exists(rc_png := os_path_join(confPath, "rc.png")):
 			remove(rc_png)
-		if exists(rcpositions := os_path_join(confPath, "RemoteControlSelection", "rcpositions.xml")):
+		if exists(rcpositions := os_path_join(confPath, "rcpositions.xml")):
 			remove(rcpositions)
 		if SystemInfo["rc_model"] != self.remote.value:
 			url = self.remotes[self.remote.value]
@@ -165,18 +170,25 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 				open(rcpositions, "wb").write(xml)
 			self.config.remote.value = self.remote.value
 		else:
-			self.config.remote.value = ""
+			self.config.remote.value = ""  # "" sets the plugin to the default state. Must be set before calling setRCFile().
+			rmtree(confPath)  # remove this as the plugin is now in the off state
 		self.config.remote.save()
 		configfile.save()
+		self.cleanup()
 		setRCFile(force=True)
 		self.close()
 
 	def keyCancel(self):
+		self.cleanup()
 		self.close()
 
 	def keyBlue(self):
 		self.remote.value = SystemInfo["rc_model"]
 		self.keySave()
+
+	def cleanup(self):  # clean up before closing
+		if exists(tempDir):
+			rmtree(tempDir)
 
 
 def main(session, **kwargs):
@@ -184,7 +196,6 @@ def main(session, **kwargs):
 
 def fromMenu(menuid, **kwargs):
 	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49)] if menuid == "system" else []
-
 
 def Plugins(**kwargs):
 	return [PluginDescriptor(name=_("Remote Control Selection"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]

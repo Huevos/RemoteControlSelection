@@ -107,6 +107,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 
 	def updateImage(self):
 		self["key_blue"].text = _("Reset to default") if SystemInfo["rc_model"] != self.remote.value else ""
+		ConfigListScreen.changedEntry(self) # force summary update always, not just on select/deselect
 		if self.skinAvailable:
 			os_makedirs(os_path_join(tempDir, self.remote.value), exist_ok=True)
 			if not fileExists(filePath := os_path_join(tempDir, self.remote.value, "rc.png")):

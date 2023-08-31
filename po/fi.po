@@ -1,40 +1,40 @@
-# Finnish translations for PACKAGE package.
-# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2023.
+# Finnish translations for RemoteControlSelection package.
+# Copyright (C) 2023 THE RemoteControlSelection'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the RemoteControlSelection package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: RemoteControlSelection\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-31 00:45+0000\n"
-"PO-Revision-Date: 2023-08-31 00:45+0000\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-08-31 07:53+0300\n"
+"Last-Translator: Orlandox\n"
+"Language-Team: Orlandox <www.huoltovalikko.fi>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:89
 msgid "Choose the remote you want to use."
-msgstr ""
+msgstr "Valitse kaukosäädin, jota haluat käyttää."
 
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:89
 msgid "Remote"
-msgstr ""
+msgstr "Kaukosäädin"
 
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:71
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:203
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:206
 msgid "Remote Control Selection"
-msgstr ""
+msgstr "Kaukosäätimen valinta"
 
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:110
 msgid "Reset to default"
-msgstr ""
+msgstr "Palauta oletus"
 
 #: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:206
 msgid "Select any remote from oe-mirrors branding module"
-msgstr ""
+msgstr "Valitse mikä tahansa kaukosäädin oe-mirrors-brändäysmoduulista"

@@ -1,0 +1,41 @@
+Portuguese translation for Remote Control Selection enigma2 plugin
+# Copyright (C) 2023 THE RemoteControlSelection'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the RemoteControlSelection package.
+# @nunigaia from OpenBh team, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Portuguese language translation for Remote Control Selection enigma2 plugin\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-31 01:10+0000\n"
+"PO-Revision-Date: 2023-08-31 19:39+0100\n"
+"Last-Translator: nunigaia\n"
+"Language-Team: @nunigaia from OpenBh team\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:89
+msgid "Choose the remote you want to use."
+msgstr "Escolha o Telecomando que pretende usar."
+
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:89
+msgid "Remote"
+msgstr "Telecomando"
+
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:71
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:203
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:206
+msgid "Remote Control Selection"
+msgstr "Seleção do Telecomando"
+
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:110
+msgid "Reset to default"
+msgstr "Restaurar padrão"
+
+#: ../usr/lib/enigma2/python/Plugins/SystemPlugins/RemoteControlSelection/plugin.py:206
+msgid "Select any remote from oe-mirrors branding module"
+msgstr "Escolha qualquer comando disponível nas fontes OE"

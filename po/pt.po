@@ -1,4 +1,4 @@
-Portuguese translation for Remote Control Selection enigma2 plugin
+# Portuguese translation for Remote Control Selection enigma2 plugin
 # Copyright (C) 2023 THE RemoteControlSelection'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the RemoteControlSelection package.
 # @nunigaia from OpenBh team, 2023.

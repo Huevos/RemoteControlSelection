@@ -17,8 +17,8 @@ def localeInit():
 
 
 def _(txt):
-	if gettext.dgettext(PluginLanguageDomain, txt):
-		return gettext.dgettext(PluginLanguageDomain, txt)
+	if translated := gettext.dgettext(PluginLanguageDomain, txt):
+		return translated
 	else:
 		print("[" + PluginLanguageDomain + "] fallback to default translation for " + txt)
 		return gettext.gettext(txt)

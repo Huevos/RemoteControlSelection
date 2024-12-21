@@ -38,6 +38,7 @@ download_path = "https://raw.githubusercontent.com/oe-mirrors/branding-module/ma
 
 tempDir = "/var/volatile/tmp/RemoteControlSelection"
 
+
 def setRCFile(force=False):
 	if not force and config.plugins.remotecontrolselection.remote.value == "":
 		return
@@ -50,6 +51,7 @@ def setRCFile(force=False):
 		SystemInfo["rc_default"] = True
 	from Screens.Rc import RcPositions
 	RcPositions.rc = None
+
 
 setRCFile()  # update on initial load
 
@@ -87,7 +89,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 	def populate(self):
 		self.getRemotes()
 		if names := list(self.remotes.keys()):
-			default = self.config.remote.value if self.config.remote.value in names else (SystemInfo["rc_model"] if SystemInfo["rc_model"] in names else name[0])
+			default = self.config.remote.value if self.config.remote.value in names else (SystemInfo["rc_model"] if SystemInfo["rc_model"] in names else names[0])
 			self.remote = ConfigSelection(default=default, choices=names)
 			self["config"].list = [getConfigListEntry(_("Remote"), self.remote, _("Choose the remote you want to use."))]
 			self.updateImage()
@@ -111,7 +113,7 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 
 	def updateImage(self):
 		self["key_blue"].text = _("Reset to default") if SystemInfo["rc_model"] != self.remote.value else ""
-		ConfigListScreen.changedEntry(self) # force summary update always, not just on select/deselect
+		ConfigListScreen.changedEntry(self)  # force summary update always, not just on select/deselect
 		if self.skinAvailable:
 			if SystemInfo["rc_model"] == self.remote.value and fileExists(filePath := resolveFilename(SCOPE_SKIN, os_path_join("rc_models", SystemInfo["rc_model"], "rc.png"))):
 				self.showImage(filePath)  # this is the default file for the machine
@@ -124,7 +126,6 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 					start_new_thread(threadDownloadPage, (urlPath, filePath, boundFunction(self.showImage, filePath), self.dataError))
 				else:
 					self.showImage(filePath)
-
 
 	def showImage(self, image, *args, **kwargs):
 		rc = LoadPixmap(image)
@@ -198,13 +199,16 @@ class RemoteControlSelection(ConfigListScreen, Screen):
 def main(session, close=None, **kwargs):
 	session.openWithCallback(boundFunction(mainCallback, close), RemoteControlSelection)
 
+
 def mainCallback(close, answer=None, *args):
 	if close and answer:
 		close(True)
 
+
 def fromMenu(menuid, **kwargs):
 	return [(_("Remote Control Selection"), main, "remotecontrolselection", 49, True)] if menuid == "system" else []
 
+
 def Plugins(**kwargs):
 	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_MENU, needsRestart=False, fnc=fromMenu)]
-#	return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
+	# return [PluginDescriptor(name=_("Remote Control Selection"), description=_("Select any remote from oe-mirrors branding module"), where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
